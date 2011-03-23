@@ -1,3 +1,5 @@
+# Licensed under The MIT License. See LICENSE for more details.
+
 import struct
 
 class Packet(object):

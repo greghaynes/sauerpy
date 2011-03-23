@@ -1,3 +1,6 @@
+# Licensed under The MIT License. See LICENSE for more details.
+# Configuration file for the server
+
 # Just ignore these import lines
 import mastermodes
 import gamemodes
