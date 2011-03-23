@@ -1,7 +1,7 @@
 import struct
 
 class Packet(object):
-	def __init__(raw_data):
+	def __init__(self, raw_data):
 		self.raw_data = raw_data
 	def peekInt(self):
 		c  = struct.unpack_from('b', self.raw_data)
@@ -23,12 +23,12 @@ class Packet(object):
 			self.raw_data = self.raw_data[5:]
 		return ret
 	def pushInt(self, val):
-		if val > 128 and val < -127:
-			raw_data += struct.pack('b', val)
-		elif val < 0x8000 and val >= 0x8000:
-			raw_data += struct.pack('bbb', 0x80, val&0x0F, val>>8)
+		if val < 128 and val > -127:
+			self.raw_data += struct.pack('b', val)
+		elif val < 0x8000 and val >= -0x8000:
+			self.raw_data += struct.pack('bbb', 127, val&0x0F, val>>8)
 		else:
-			raw_data += struct.pack('bbbbb', 0x81,
+			self.raw_data += struct.pack('bbbbb', -127,
 			                        val&0xFF,
 			                        (val>>8)&0xFF,
 			                        (val>>16)&0xFF,

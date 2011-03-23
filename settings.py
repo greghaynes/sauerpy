@@ -26,7 +26,8 @@ start_map = 'complex'
 # *****************************************************************
 # Dont touch settings below here unless you know what youre doing |
 # *****************************************************************
-sauerserver_port = port + 1
+beaconserver_port = port + 1
+sauerserver_port = port
 
 protocol_version = 257
 

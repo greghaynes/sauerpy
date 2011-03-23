@@ -2,7 +2,8 @@ import settings
 import time
 
 class Match(object):
-	def __init__(self, game_mode=settings.game_mode, game_map=settings.start_map):
+	def __init__(self, server_state, game_mode=settings.game_mode, game_map=settings.start_map):
+		self.server_state = server_state
 		self.game_mode = game_mode
 		self.game_map = game_map
 		self.start_time = time.time()

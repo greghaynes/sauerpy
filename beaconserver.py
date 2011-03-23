@@ -1,3 +1,4 @@
+import settings
 import packet
 import asyncore
 import socket
@@ -16,18 +17,17 @@ class BeaconServer(asyncore.dispatcher):
 
 	def handle_read(self):
 		data, addr = self.recvfrom(2048)
-		p = packet(data)
-		while True:
-			print 'Sending info packet to ', addr
-			p.pushInt(len(self.serverState.players))
-			p.pushInt(5)
-			p.pushInt(settings.protocol_version)
-			p.pushInt(self.serverState.match.game_mode)
-			p.pushInt(int(self.serverState.match.secondsRemaining() / 60))
-			p.pushInt(self.serverState.max_clients)
-			p.pushInt(self.serverState.master_mode)
-			p.pushString(self.serverState.server_desc)
-			p.pushString(self.serverState.match.game_map)
+		p = packet.Packet(data)
+		print 'Sending info packet to ', addr
+		p.pushInt(len(self.serverState.players))
+		p.pushInt(5)
+		p.pushInt(settings.protocol_version)
+		p.pushInt(self.serverState.current_match.game_mode)
+		p.pushInt(int(self.serverState.current_match.secondsRemaining() / 60))
+		p.pushInt(self.serverState.max_clients)
+		p.pushInt(self.serverState.master_mode)
+		p.pushString(self.serverState.server_desc)
+		p.pushString(self.serverState.current_match.game_map)
 
 	def handle_write(self):
 		pass
