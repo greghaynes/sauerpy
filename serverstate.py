@@ -1,4 +1,4 @@
-class GameState(object):
+class ServerState(object):
 	def __init__(self):
 		self.players = []
 
