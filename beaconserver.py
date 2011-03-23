@@ -1,3 +1,4 @@
+import packet
 import asyncore
 import socket
 

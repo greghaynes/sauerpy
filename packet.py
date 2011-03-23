@@ -8,16 +8,16 @@ class Packet(object):
 		if c == -128:
 			n, nn = c.struct.unpack_from('bb', self.raw_data)
 			return (n | (nn<<8))
-		else if c == -127:
+		elif c == -127:
 			n, nn, nnn, nnnn = c.struct.unpack_from('bbbb', self.raw_data)
-			return (n | (nn<<8) | (nnn<<16) | (nnnn<<24)
-		else
+			return (n | (nn<<8) | (nnn<<16) | (nnnn<<24))
+		else:
 			return c
 	def popInt(self):
 		ret = peekInt(self)
 		if ret < 128 and ret > -127:
 			self.raw_data = self.raw_data[1:]
-		else if ret < 0x8000 and ret >= -0x8000:
+		elif ret < 0x8000 and ret >= -0x8000:
 			self.raw_data = self.raw_data[3:]
 		else:
 			self.raw_data = self.raw_data[5:]
@@ -25,7 +25,7 @@ class Packet(object):
 	def pushInt(self, val):
 		if val > 128 and val < -127:
 			raw_data += struct.pack('b', val)
-		else if val < 0x8000 and val >= 0x8000:
+		elif val < 0x8000 and val >= 0x8000:
 			raw_data += struct.pack('bbb', 0x80, val&0x0F, val>>8)
 		else:
 			raw_data += struct.pack('bbbbb', 0x81,
