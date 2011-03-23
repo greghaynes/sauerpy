@@ -6,15 +6,13 @@ class Packet(object):
 	def peekInt(self):
 		c  = struct.unpack_from('b', self.raw_data)
 		if c == -128:
-			n, nn = c.struct.unpack_from('bb', self.raw_data)
-			return (n | (nn<<8))
+			return c.struct.unpack_from('<h', self.raw_data)
 		elif c == -127:
-			n, nn, nnn, nnnn = c.struct.unpack_from('bbbb', self.raw_data)
-			return (n | (nn<<8) | (nnn<<16) | (nnnn<<24))
+			return c.struct.unpack_from('<i', self.raw_data)
 		else:
 			return c
 	def popInt(self):
-		ret = peekInt(self)
+		ret = self.peekInt()
 		if ret < 128 and ret > -127:
 			self.raw_data = self.raw_data[1:]
 		elif ret < 0x8000 and ret >= -0x8000:
