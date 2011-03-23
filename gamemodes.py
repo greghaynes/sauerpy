@@ -1,3 +1,5 @@
+# Licensed under The MIT License. See LICENSE for more details.
+
 FFA = 0
 COOP_EDIT = 1
 TEAM = 2

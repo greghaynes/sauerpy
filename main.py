@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# Licensed under The MIT License. See LICENSE for more details.
 
 import serverstate
 import beaconserver

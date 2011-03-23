@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# Licensed under The MIT License. See LICENSE for more details.
+
 import socket
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
