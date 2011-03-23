@@ -9,7 +9,7 @@ class Packet(object):
 			n, nn = c.struct.unpack_from('bb', self.raw_data)
 			return (n | (nn<<8))
 		else if c == -127:
-			n, nn, nnn, nnnn = c.struct.unpack_from('bbb', self.raw_data)
+			n, nn, nnn, nnnn = c.struct.unpack_from('bbbb', self.raw_data)
 			return (n | (nn<<8) | (nnn<<16) | (nnnn<<24)
 		else
 			return c
