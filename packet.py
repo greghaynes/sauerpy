@@ -23,16 +23,12 @@ class Packet(object):
 			self.raw_data = self.raw_data[5:]
 		return ret
 	def pushInt(self, val):
-		if val < 128 and val > -127:
+		if val < 0x80 and val > -0x7f:
 			self.raw_data += struct.pack('b', val)
 		elif val < 0x8000 and val >= -0x8000:
-			self.raw_data += struct.pack('bbb', 127, val&0x0F, val>>8)
+			self.raw_data += '\x80' + struct.pack('<h', val)
 		else:
-			self.raw_data += struct.pack('bbbbb', -127,
-			                        val&0xFF,
-			                        (val>>8)&0xFF,
-			                        (val>>16)&0xFF,
-			                        (val>>24)&0xFF)
+			self.raw_data += '\x81' + struct.pack('<i', val)
 	def pushString(self, val):
 		for ch in val:
 			self.pushInt(ord(ch))

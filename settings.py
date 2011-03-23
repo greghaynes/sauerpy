@@ -29,7 +29,7 @@ start_map = 'complex'
 beaconserver_port = port + 1
 sauerserver_port = port
 
-protocol_version = 257
+protocol_version = 258
 
 match_length = 600 # In seconds
 

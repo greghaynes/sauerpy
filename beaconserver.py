@@ -26,12 +26,14 @@ class BeaconServer(asyncore.dispatcher):
 		p.pushInt(int(self.serverState.current_match.secondsRemaining() / 60))
 		p.pushInt(self.serverState.max_clients)
 		p.pushInt(self.serverState.master_mode)
-		p.pushString(self.serverState.server_desc)
 		p.pushString(self.serverState.current_match.game_map)
+		p.pushString(self.serverState.server_desc)
+		self.write_stack.append((p.raw_data, addr))
 
 	def handle_write(self):
-		pass
+		data, addr = self.write_stack.pop()
+		self.sendto(data, addr)
 
 	def writable(self):
-		return False
+		return len(self.write_stack) != 0
 
