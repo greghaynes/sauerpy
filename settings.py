@@ -1,8 +1,14 @@
+# Just ignore these import lines
+import mastermodes
+
 # Server hostname or IP
 hostname = ''
 
 # Server port
 port = 1337
+
+# Master mode
+master_mode = mastermodes.OPEN
 
 # *****************************************************************
 # Dont touch settings below here unless you know what youre doing |
