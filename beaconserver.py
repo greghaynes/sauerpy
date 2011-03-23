@@ -19,13 +19,15 @@ class BeaconServer(asyncore.dispatcher):
 		p = packet(data)
 		while True:
 			print 'Sending info packet to ', addr
-			p.putInt(len(self.serverState.players))
-			p.putInt(5)
-			p.putInt(settings.protocol_version)
-			p.putInt(self.serverState.match.game_mode)
-			p.putInt(int(self.serverState.match.secondsRemaining() / 60))
-			p.putInt(self.serverState.max_clients)
-			p.putInt(self.serverState.master_mode)
+			p.pushInt(len(self.serverState.players))
+			p.pushInt(5)
+			p.pushInt(settings.protocol_version)
+			p.pushInt(self.serverState.match.game_mode)
+			p.pushInt(int(self.serverState.match.secondsRemaining() / 60))
+			p.pushInt(self.serverState.max_clients)
+			p.pushInt(self.serverState.master_mode)
+			p.pushString(self.serverState.server_desc)
+			p.pushString(self.serverState.match.game_map)
 
 	def handle_write(self):
 		pass

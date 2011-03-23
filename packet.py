@@ -33,4 +33,8 @@ class Packet(object):
 			                        (val>>8)&0xFF,
 			                        (val>>16)&0xFF,
 			                        (val>>24)&0xFF)
+	def pushString(self, val):
+		for ch in val:
+			self.pushInt(ord(ch))
+		self.pushInt(0)
 

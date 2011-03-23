@@ -2,6 +2,9 @@
 import mastermodes
 import gamemodes
 
+# Server description
+server_desc = 'A sauerpy server'
+
 # Server hostname or IP
 hostname = ''
 
