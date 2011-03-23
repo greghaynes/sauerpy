@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import serverstate
 import beaconserver
 import sauerserver
