@@ -11,6 +11,9 @@ port = 1337
 # Master mode
 master_mode = mastermodes.OPEN
 
+# Maximum number of clients
+max_clients = 16
+
 # Game mode
 game_mode = gamemodes.FFA
 
@@ -24,5 +27,5 @@ sauerserver_port = port + 1
 
 protocol_version = 257
 
-match_length = 600
+match_length = 600 # In seconds
 
