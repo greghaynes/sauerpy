@@ -1,3 +1,4 @@
+import gamestate
 import beaconserver
 import sauerserver
 import settings
@@ -5,8 +6,9 @@ import settings
 import asyncore
 
 if __name__ == "__main__":
-	beaconServer = beaconserver.BeaconServer(settings.hostname, settings.port)
-	sauerServer = sauerserver.SauerServer(settings.hostname, settings.sauerserver_port)
+	gameState = gamestate.GameState()
+	beaconServer = beaconserver.BeaconServer(settings.hostname, settings.port, gameState)
+	sauerServer = sauerserver.SauerServer(settings.hostname, settings.sauerserver_port, gameState)
 	
 	asyncore.loop()
 

@@ -2,8 +2,9 @@ import asyncore
 import socket
 
 class SauerServer(asyncore.dispatcher):
-	def __init__(self, host, port):
+	def __init__(self, host, port, gameState):
 		asyncore.dispatcher.__init__(self)
+		self.gameState = gameState
 		self.create_socket(socket.AF_INET, socket.SOCK_DGRAM)
 		self.bind((host, port)) 
 
