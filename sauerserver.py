@@ -3,7 +3,6 @@
 import packettypes
 import sauerstream
 import enet.server as enetserver
-import enetpacket
 
 import logging
 import socket
