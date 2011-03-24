@@ -21,6 +21,7 @@ class SauerServer(asyncore.dispatcher):
 
 	def handle_read(self):
 		data, addr = self.recvfrom(2048)
+		print len(data), ': ',
 		for ch in data:
 			print '%x' % ord(ch),
 		print ''
