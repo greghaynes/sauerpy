@@ -4,11 +4,12 @@ import commands
 
 import struct
 
-
 class EnetPacket(object):
 	def __init__(self, data):
 		self.data = data
 		self.peer_id, self.sent_time, self.command, self.channel_id, self.reliable_seq_num = struct.unpack_from('hhbbh', data)
+		self.ackgnowledge = self.command & commands.FLAG_ACKGNOWLEDGE
+		self.unsequenced = self.command & commands.FLAG_UNSEQUENCED
 		self.command = self.command & 0xF
 		command_parsers = {commands.CONNECT: self.parse_connect,
 		                   commands.CONNECT_VERIFY: self.parse_connect_verify}
@@ -20,4 +21,15 @@ class EnetPacket(object):
 
 	def parse_connect_verify(self, remaining_data):
 		self.outgoing_peer_id, self.incoming_sess_id, self.outgoing_sess_id, self.mtu, self.window_size, self.channel_count, self.incoming_bandwidth, self.outgoing_bandwidth, self.packet_throttle_interval, self.packet_throttle_acceleration, self.packet_throtle_deceleration, self.connect_id = struct.unpack_from('hbbiiiiiiiii', remaining_data)
+
+	def toPackedProtoHeader(self):
+		cmd = self.command
+		if self.ackgnowledge:
+			cmd = cmd & commands.FLAG_ACKGNOWLEDGE
+		if self.unsequenced:
+			cmd = cmd & commands.FLAG_UNSEQUENCED
+		return struct.pack('hhbbh', self.peer_id, self.sent_time, cmd, self.channel_id, self.reliable_seq_num)
+
+	def toPackedConnectVerify(self):
+		return self.toPackedProtoHeader() + struct.pack('hbbiiiiiiiii', self.outgoing_peer_id, self.incoming_sess_id, self.outgoing_sess_id, self.mtu, self.window_size, self.channel_count, self.incoming_bandwidth, self.outgoing_bandwidth, self.packet_throttle_interval, self.packet_throttle_acceleration, self.packet_throtle_deceleration, self.connect_id)
 
