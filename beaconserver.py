@@ -1,7 +1,8 @@
 # Licensed under The MIT License. See LICENSE for more details.
 
 import settings
-import packet
+import sauerstream
+
 import asyncore
 import socket
 import collections
@@ -19,7 +20,7 @@ class BeaconServer(asyncore.dispatcher):
 
 	def handle_read(self):
 		data, addr = self.recvfrom(2048)
-		p = packet.Packet(data)
+		p = sauerstream.SauerStream(data)
 		print 'Sending info packet to ', addr
 		p.pushInt(len(self.serverState.players))
 		p.pushInt(5)

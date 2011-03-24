@@ -1,7 +1,10 @@
 # Licensed under The MIT License. See LICENSE for more details.
 
 import packettypes
-import packet
+import sauerstream
+import enetpacket
+
+import logging
 import asyncore
 import socket
 
@@ -14,17 +17,21 @@ class SauerServer(asyncore.dispatcher):
 		self.packet_handlers = {packettypes.CONNECT: self.packet_connect}
 
 	def handle_connect(self):
-		print 'connection'
+		pass
 
 	def handle_read(self):
 		data, addr = self.recvfrom(2048)
-		p = packet.Packet(data)
+		for ch in data:
+			print '%x' % ord(ch),
+		print ''
+		e_p = enetpacket.EnetPacket(data)
+		p = sauerstream.SauerStream(e_p.data)
 		p_type = p.popInt()
 		try:
 			handler = self.packet_handlers[p_type]
 			handler(addr, p)
 		except KeyError:
-			print 'Unhandled packet'
+			logging.error('Unknown packet type %d from %s' % (p_type, addr))
 
 	def handle_write(self):
 		pass
@@ -33,5 +40,5 @@ class SauerServer(asyncore.dispatcher):
 		return False
 
 	def packet_connect(self, addr, p):
-		print 'Connect from', addr	
+		logging.info('client connected from %s:%d' % (addr[0], addr[1]))
 
