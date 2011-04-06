@@ -8,7 +8,7 @@ class EnetPacket(object):
 	def __init__(self, data):
 		self.data = data
 		self.peer_id, self.sent_time, self.command, self.channel_id, self.reliable_seq_num = struct.unpack_from('hhbbh', data)
-		self.ackgnowledge = self.command & commands.FLAG_ACKGNOWLEDGE
+		self.acknowledge = self.command & commands.FLAG_ACKNOWLEDGE
 		self.unsequenced = self.command & commands.FLAG_UNSEQUENCED
 		self.command = self.command & 0xF
 		command_parsers = {commands.CONNECT: self.parse_connect,
@@ -24,8 +24,8 @@ class EnetPacket(object):
 
 	def toPackedProtoHeader(self):
 		cmd = self.command
-		if self.ackgnowledge:
-			cmd = cmd & commands.FLAG_ACKGNOWLEDGE
+		if self.acknowledge:
+			cmd = cmd & commands.FLAG_ACKNOWLEDGE
 		if self.unsequenced:
 			cmd = cmd & commands.FLAG_UNSEQUENCED
 		return struct.pack('hhbbh', self.peer_id, self.sent_time, cmd, self.channel_id, self.reliable_seq_num)
