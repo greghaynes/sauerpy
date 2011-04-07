@@ -24,7 +24,12 @@ class EnetServer(asyncore.dispatcher):
 
 	def handle_read(self):
 		data, addr = self.recvfrom(2048)
-		p = packet.EnetPacket(data)
+		p = packet.EnetPacket()
+		p.loadRawData(data)
+		print '+',
+		for ch in data:
+			print '%x' % ord(ch),
+		print ''
 		try:
 			self.command_handlers[p.command](p, addr)
 		except KeyError:
@@ -32,6 +37,10 @@ class EnetServer(asyncore.dispatcher):
 
 	def handle_write(self):
 		data, addr = self.write_stack.pop()
+		print '-',
+		for ch in data:
+			print '%x' % ord(ch),
+		print ''
 		self.sendto(data, addr)
 
 	def writable(self):
