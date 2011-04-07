@@ -5,6 +5,7 @@ import commands
 import struct
 
 class EnetPacket(object):
+
 	def __init__(self):
 		pass
 
@@ -12,7 +13,7 @@ class EnetPacket(object):
 		# Load packet header
 		self.peer_id, self.sent_time, self.command, self.channel_id, self.reliable_seq_num = struct.unpack_from('HHBBH', data)
 		# Load command flags
-		self.ackgnowledge = (self.command & commands.FLAG_ACKGNOWLEDGE) != 0
+		self.acknowledge = (self.command & commands.FLAG_ACKGNOWLEDGE) != 0
 		self.unsequenced = (self.command & commands.FLAG_UNSEQUENCED) != 0
 		# Mask command out from flags
 		self.command = self.command & 0xF
