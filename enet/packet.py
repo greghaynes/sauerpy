@@ -13,7 +13,7 @@ class EnetPacket(object):
 		# Load packet header
 		self.peer_id, self.sent_time, self.command, self.channel_id, self.reliable_seq_num = struct.unpack_from('HHBBH', data)
 		# Load command flags
-		self.acknowledge = (self.command & commands.FLAG_ACKGNOWLEDGE) != 0
+		self.acknowledge = (self.command & commands.FLAG_ACKNOWLEDGE) != 0
 		self.unsequenced = (self.command & commands.FLAG_UNSEQUENCED) != 0
 		# Mask command out from flags
 		self.command = self.command & 0xF
@@ -31,8 +31,8 @@ class EnetPacket(object):
 
 	def toPackedProtoHeader(self):
 		cmd = self.command
-		if self.ackgnowledge:
-			cmd = cmd | commands.FLAG_ACKGNOWLEDGE
+		if self.acknowledge:
+			cmd = cmd | commands.FLAG_ACKNOWLEDGE
 		if self.unsequenced:
 			cmd = cmd | commands.FLAG_UNSEQUENCED
 		return struct.pack('HHBBH', self.outgoing_peer_id, self.sent_time, cmd, self.channel_id, self.reliable_seq_num)
