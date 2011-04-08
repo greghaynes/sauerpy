@@ -25,8 +25,7 @@ class EnetPacket(object):
 		# Call parser for specific packet command
 		command_parsers = {commands.CONNECT: self.parse_connect,
 		                   commands.CONNECT_VERIFY: self.parse_connect_verify}
-		if self.command != 0:
-			command_parsers[self.command](data[8:])
+		command_parsers[self.command](data[8:])
 
 	def parse_connect(self, remaining_data):
 		self.parse_connect_verify(remaining_data)
