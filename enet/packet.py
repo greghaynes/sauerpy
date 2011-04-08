@@ -24,7 +24,8 @@ class EnetPacket(object):
 		self.command = self.command & 0xF
 		# Call parser for specific packet command
 		command_parsers = {commands.CONNECT: self.parse_connect,
-		                   commands.CONNECT_VERIFY: self.parse_connect_verify}
+		                   commands.CONNECT_VERIFY: self.parse_connect_verify,
+				   commands.PING: self.parse_ping}
 		command_parsers[self.command](data[8:])
 
 	def parse_connect(self, remaining_data):
@@ -32,6 +33,10 @@ class EnetPacket(object):
 
 	def parse_connect_verify(self, remaining_data):
 		self.outgoing_peer_id, self.incoming_sess_id, self.outgoing_sess_id, self.mtu, self.window_size, self.channel_count, self.incoming_bandwidth, self.outgoing_bandwidth, self.packet_throttle_interval, self.packet_throttle_acceleration, self.packet_throtle_deceleration, self.connect_id = struct.unpack_from('HBBIIIIIIIII', remaining_data)
+
+	def parse_ping(self, remaining_data):
+		if len(remaining_data) != 0:
+			raise ValueError("unrecognized ping packet")
 
 	def toPackedProtoHeader(self):
 		cmd = self.command
