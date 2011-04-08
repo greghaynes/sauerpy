@@ -54,6 +54,7 @@ class EnetPacket(object):
 
 	def to_packed_ping(self):
 		self.command = commands.PING | commands.FLAG_ACKNOWLEDGE
+		self.channel_id = 0xFF
 		return self.to_packed_proto_header()
 
 	def __str__(self):
