@@ -46,3 +46,11 @@ class EnetPacket(object):
 		self.command = commands.CONNECT_VERIFY
 		return self.toPackedProtoHeader() + struct.pack('HBBIIIIIIIII', 0xa0, self.incoming_sess_id, self.outgoing_sess_id, self.mtu, self.window_size, self.channel_count, self.incoming_bandwidth, self.outgoing_bandwidth, self.packet_throttle_interval, self.packet_throttle_acceleration, self.packet_throtle_deceleration, self.connect_id)
 
+	def __str__(self):
+		ret = ''
+		ret += 'Header:\n'
+		ret += '\tcompressed: %d\n' % self.is_compressed
+		ret += '\tpeer id: %d\n' % self.peer_id
+		ret += '\tsession id: %d\n' % self.session_id
+		return ret
+
