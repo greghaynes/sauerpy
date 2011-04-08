@@ -52,5 +52,10 @@ class EnetPacket(object):
 		ret += '\tcompressed: %d\n' % self.is_compressed
 		ret += '\tpeer id: %d\n' % self.peer_id
 		ret += '\tsession id: %d\n' % self.session_id
+		ret += '\tcommand: %d\n' % self.command
+		ret += 'Command Header:\n'
+		ret += '\toutgoing peer id: %d\n' % self.outgoing_peer_id
+		ret += '\tincoming session id: %d\n' % self.incoming_sess_id
+		ret += '\toutgoing session id: %d\n' % self.outgoing_sess_id
 		return ret
 
