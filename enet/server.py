@@ -53,6 +53,16 @@ class EnetServer(asyncore.dispatcher):
 		except KeyError:
 			pass
 		self.clients[addr] = EnetClient(addr)
+
+		incoming_sess_id = (p.outgoing_sess_id + 1) & (commands.HEADER_SESSION_MASK >> commands.HEADER_SESSION_SHIFT)
+		if incoming_sess_id == p.outgoing_sess_id:
+			incoming_sess_id = (incoming_sess_id + 1) & (commands.HEADER_SESSION_MASK >> commands.HEADER_SESSION_SHIFT)
+		outgoing_sess_id = (p.incoming_sess_id + 1) & (commands.HEADER_SESSION_MASK >> commands.HEADER_SESSION_SHIFT)
+		if outgoing_sess_id == p.incoming_sess_id:
+			outgoing_sess_id = (outgoing_sess_id + 1) & (commands.HEADER_SESSION_MASK >> commands.HEADER_SESSION_SHIFT)
+		p.incoming_sess_id = incoming_sess_id
+		p.outgoing_sess_id = outgoing_sess_id
+
 		buff = p.toPackedConnectVerify()
 		self.write_stack.append((buff, addr))
 
