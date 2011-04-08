@@ -53,7 +53,8 @@ class EnetPacket(object):
 		return self.to_packed_proto_header() + struct.pack('HBBIIIIIIIII', 0xa0, self.incoming_sess_id, self.outgoing_sess_id, self.mtu, self.window_size, self.channel_count, self.incoming_bandwidth, self.outgoing_bandwidth, self.packet_throttle_interval, self.packet_throttle_acceleration, self.packet_throtle_deceleration, self.connect_id)
 
 	def to_packed_ping(self):
-		self.command = commands.PING | commands.FLAG_ACKNOWLEDGE
+		self.command = commands.PING
+		self.acknowledge = True
 		self.channel_id = 0xFF
 		return self.to_packed_proto_header()
 
