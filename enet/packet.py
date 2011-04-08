@@ -40,7 +40,7 @@ class EnetPacket(object):
 		if len(remaining_data) != 0:
 			raise ValueError("unrecognized ping packet")
 
-	def toPackedProtoHeader(self):
+	def to_packed_proto_header(self):
 		cmd = self.command
 		if self.acknowledge:
 			cmd = cmd | commands.FLAG_ACKNOWLEDGE
@@ -48,13 +48,13 @@ class EnetPacket(object):
 			cmd = cmd | commands.FLAG_UNSEQUENCED
 		return struct.pack('HHBBH', self.outgoing_peer_id, self.sent_time, cmd, self.channel_id, self.reliable_seq_num)
 
-	def toPackedConnectVerify(self):
+	def to_packed_connect_verify(self):
 		self.command = commands.CONNECT_VERIFY
-		return self.toPackedProtoHeader() + struct.pack('HBBIIIIIIIII', 0xa0, self.incoming_sess_id, self.outgoing_sess_id, self.mtu, self.window_size, self.channel_count, self.incoming_bandwidth, self.outgoing_bandwidth, self.packet_throttle_interval, self.packet_throttle_acceleration, self.packet_throtle_deceleration, self.connect_id)
+		return self.to_packed_proto_header() + struct.pack('HBBIIIIIIIII', 0xa0, self.incoming_sess_id, self.outgoing_sess_id, self.mtu, self.window_size, self.channel_count, self.incoming_bandwidth, self.outgoing_bandwidth, self.packet_throttle_interval, self.packet_throttle_acceleration, self.packet_throtle_deceleration, self.connect_id)
 
-	def toPackedPing(self):
+	def to_packed_ping(self):
 		self.command = commands.PING
-		return self.toPackedProtoHeader()
+		return self.to_packed_proto_header()
 
 	def __str__(self):
 		ret = ''

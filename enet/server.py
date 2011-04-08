@@ -53,6 +53,6 @@ class EnetServer(asyncore.dispatcher):
 		except KeyError:
 			pass
 		self.clients[addr] = EnetClient(addr)
-		buff = p.toPackedConnectVerify()
+		buff = p.to_packed_connect_verify()
 		self.write_stack.append((buff, addr))
 
