@@ -63,6 +63,6 @@ class EnetServer(asyncore.dispatcher):
 		p.incoming_sess_id = incoming_sess_id
 		p.outgoing_sess_id = outgoing_sess_id
 
-		buff = p.toPackedConnectVerify()
+		buff = p.to_packed_connect_verify()
 		self.write_stack.append((buff, addr))
 
