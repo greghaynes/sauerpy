@@ -15,7 +15,7 @@ class EnetPacket(object):
 		# extract header information 
 		self.session_id = (self.peer_id & commands.HEADER_SESSION_MASK) >> commands.HEADER_SESSION_SHIFT
 		header_flags = self.peer_id & commands.HEADER_FLAG_MASK
-		self.peer_id = self.peer_id & (commands.HEADER_FLAG_MASK | commands.HEADER_SESSION_MASK)
+		self.peer_id = self.peer_id & ~(commands.HEADER_FLAG_MASK | commands.HEADER_SESSION_MASK)
 		self.is_compressed = (header_flags & commands.HEADER_FLAG_COMPRESSED) != 0 
 		# Load command flags
 		self.acknowledge = (self.command & commands.FLAG_ACKNOWLEDGE) != 0
