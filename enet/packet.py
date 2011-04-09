@@ -63,6 +63,11 @@ class EnetPacket(object):
 		self.channel_id = 0xFF
 		return self.to_packed_proto_header()
 
+	def to_packed_bandwidth_limit(self):
+		self.command = commands.BANDWIDTH_LIMIT
+		self.channel_id = 0xFF
+		return self.to_packed_proto_header() + struct.pack("II", self.incoming_bandwidth, self.outgoing_bandwidth)
+
 	def __str__(self):
 		ret = ''
 		ret += 'Header:\n'
