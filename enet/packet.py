@@ -27,15 +27,14 @@ class EnetPacket(object):
 		# Call parser for specific packet command
 		command_parsers = {commands.CONNECT: self.parse_connect,
 		                   commands.CONNECT_VERIFY: self.parse_connect_verify,
-				   commands.PING: self.parse_ping,
-				   commands.BANDWIDTH_LIMIT: self.parse_bandwidth_limit,
-				   commands.SEND_RELIABLE: self.parse_reliable,
-				   commands.SEND_UNRELIABLE: self.parse_unreliable,
-				   commands.SEND_UNSEQUENCED: self.parse_unsequenced,
-				   commands.ACNOWLEDGE: self.parse_acknowledge,
-				   commands.THROTTLE_CONFIGURE: self.parse_throttle_configure,
-				   commands.DISCONNECT: parse_disconnect}
-				   commands.BANDWIDTH_LIMIT: self.parse_bandwidth_limit}
+		                   commands.PING: self.parse_ping,
+		                   commands.BANDWIDTH_LIMIT: self.parse_bandwidth_limit,
+		                   commands.SEND_RELIABLE: self.parse_reliable,
+		                   commands.SEND_UNRELIABLE: self.parse_unreliable,
+		                   commands.SEND_UNSEQUENCED: self.parse_unsequenced,
+		                   commands.ACNOWLEDGE: self.parse_acknowledge,
+		                   commands.THROTTLE_CONFIGURE: self.parse_throttle_configure,
+		                   commands.DISCONNECT: parse_disconnect}
 		command_parsers[self.command](data[8:])
 
 	def parse_connect(self, remaining_data):
@@ -62,7 +61,7 @@ class EnetPacket(object):
 	def parse_unsequenced(self, remaining_data):
 		self.unsequenced_group, self.data_length = struct.unpack_from('HH', remaining_data[:4])
 		self.received_data = remaining_data[4:]
-_
+
 	def parse_acknowledge(self, remaining_data):
 		self.acknowledged_reliable_sequence_number, self.acknowledged_sent_time = struct.unpack_from('HH', remaining_data)
 
