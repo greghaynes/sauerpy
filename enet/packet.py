@@ -28,13 +28,14 @@ class EnetPacket(object):
 		command_parsers = {commands.CONNECT: self.parse_connect,
 		                   commands.CONNECT_VERIFY: self.parse_connect_verify,
 				   commands.PING: self.parse_ping,
-				   commands.BANDWIDTH_LIMIT, self.parse_bandwidth_limit,
+				   commands.BANDWIDTH_LIMIT: self.parse_bandwidth_limit,
 				   commands.SEND_RELIABLE: self.parse_reliable,
 				   commands.SEND_UNRELIABLE: self.parse_unreliable,
 				   commands.SEND_UNSEQUENCED: self.parse_unsequenced,
 				   commands.ACNOWLEDGE: self.parse_acknowledge,
 				   commands.THROTTLE_CONFIGURE: self.parse_throttle_configure,
 				   commands.DISCONNECT: parse_disconnect}
+				   commands.BANDWIDTH_LIMIT: self.parse_bandwidth_limit}
 		command_parsers[self.command](data[8:])
 
 	def parse_connect(self, remaining_data):

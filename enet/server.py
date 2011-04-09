@@ -22,9 +22,9 @@ class EnetClient(object):
 			self.window_size = commands.MAXIMUM_WINDOW
 		else:
 			self.window_size = min(self.incoming_bandwidth, server.outgoing_bandwidth) * commands.MINIMUM_WINDOW / commands.PEER_WINDOW_SCALE
-		if self.window_size < commands.MINIMUM_WINDOW
+		if self.window_size < commands.MINIMUM_WINDOW:
 			self.window_size = commands.MINIMUM_WINDOW
-		elif self.window_size > commands.MAXIMUM_WINDOW
+		elif self.window_size > commands.MAXIMUM_WINDOW:
 			self.window_size = commands.MAXIMUM_WINDOW
 
 class EnetServer(asyncore.dispatcher):
