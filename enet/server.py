@@ -11,13 +11,31 @@ import collections
 class EnetClient(object):
 	def __init__(self, addr):
 		self.address = addr
+		self.incoming_bandwidth = 0
+		self.outgoing_bandwidth = 0
+		self.window_size = 0
+
+	def bandwidth_from_packet(self, p, server):
+		self.incoming_bandwidth = p.incoming_bandwidth
+		self.outgoing_bandwidth = p.outgoing_bandwidth
+		if self.incoming_bandwidth == 0 and server.outgoing_bandwidth == 0:
+			self.window_size = commands.MAXIMUM_WINDOW
+		else:
+			self.window_size = min(self.incoming_bandwidth, server.outgoing_bandwidth) * commands.MINIMUM_WINDOW / commands.PEER_WINDOW_SCALE
+		if self.window_size < commands.MINIMUM_WINDOW
+			self.window_size = commands.MINIMUM_WINDOW
+		elif self.window_size > commands.MAXIMUM_WINDOW
+			self.window_size = commands.MAXIMUM_WINDOW
 
 class EnetServer(asyncore.dispatcher):
 	def __init__(self):
 		asyncore.dispatcher.__init__(self)
-		self.command_handlers = {commands.CONNECT: self.enet_connect}
+		self.command_handlers = {commands.CONNECT: self.enet_connect,
+					 commands.BANDWIDTH_LIMIT: self.enet_bandwidth_limit}
 		self.clients = {}
 		self.write_stack = collections.deque()
+		self.outgoing_bandwidth = 0
+		self.incoming_bandwidth = 0
 
 	def handle_connect(self):
 		pass
@@ -52,7 +70,12 @@ class EnetServer(asyncore.dispatcher):
 			self.disconnect(self.clients[addr])
 		except KeyError:
 			pass
-		self.clients[addr] = EnetClient(addr)
+		client = EnetClient(addr)
+		client.bandwidth_from_packet(p, self)
+		self.clients[addr] = client 
 		buff = p.to_packed_connect_verify()
 		self.write_stack.append((buff, addr))
+
+	def enet_bandwidth_limit(self, p, addr):
+		self.clients[addr].bandwidth_from_packet(p, self)
 
