@@ -25,17 +25,16 @@ class EnetPacket(object):
 		# Mask command out from flags
 		self.command = self.command & 0xF
 		# Call parser for specific packet command
-		command_parsers = {commands.CONNECT: self.parse_connect,
-		                   commands.CONNECT_VERIFY: self.parse_connect_verify,
-		                   commands.PING: self.parse_ping,
-		                   commands.BANDWIDTH_LIMIT: self.parse_bandwidth_limit,
-		                   commands.SEND_RELIABLE: self.parse_reliable,
-		                   commands.SEND_UNRELIABLE: self.parse_unreliable,
-		                   commands.SEND_UNSEQUENCED: self.parse_unsequenced,
-		                   commands.ACKNOWLEDGE: self.parse_acknowledge,
-		                   commands.THROTTLE_CONFIGURE: self.parse_throttle_configure,
-		                   commands.DISCONNECT: self.parse_disconnect}
-		command_parsers[self.command](data[8:])
+		{	commands.CONNECT: self.parse_connect,
+			commands.CONNECT_VERIFY: self.parse_connect_verify,
+			commands.PING: self.parse_ping,
+			commands.BANDWIDTH_LIMIT: self.parse_bandwidth_limit,
+			commands.SEND_RELIABLE: self.parse_reliable,
+			commands.SEND_UNRELIABLE: self.parse_unreliable,
+			commands.SEND_UNSEQUENCED: self.parse_unsequenced,
+			commands.ACKNOWLEDGE: self.parse_acknowledge,
+			commands.THROTTLE_CONFIGURE: self.parse_throttle_configure,
+			commands.DISCONNECT: self.parse_disconnect}[self.command](data[8:])
 
 	def parse_connect(self, remaining_data):
 		self.parse_connect_verify(remaining_data)
