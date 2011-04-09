@@ -73,6 +73,16 @@ class EnetServer(asyncore.dispatcher):
 		client = EnetClient(addr)
 		client.bandwidth_from_packet(p, self)
 		self.clients[addr] = client 
+
+		incoming_sess_id = (p.outgoing_sess_id + 1) & (commands.HEADER_SESSION_MASK >> commands.HEADER_SESSION_SHIFT)
+		if incoming_sess_id == p.outgoing_sess_id:
+			incoming_sess_id = (incoming_sess_id + 1) & (commands.HEADER_SESSION_MASK >> commands.HEADER_SESSION_SHIFT)
+		outgoing_sess_id = (p.incoming_sess_id + 1) & (commands.HEADER_SESSION_MASK >> commands.HEADER_SESSION_SHIFT)
+		if outgoing_sess_id == p.incoming_sess_id:
+			outgoing_sess_id = (outgoing_sess_id + 1) & (commands.HEADER_SESSION_MASK >> commands.HEADER_SESSION_SHIFT)
+		p.incoming_sess_id = incoming_sess_id
+		p.outgoing_sess_id = outgoing_sess_id
+
 		buff = p.to_packed_connect_verify()
 		self.write_stack.append((buff, addr))
 
