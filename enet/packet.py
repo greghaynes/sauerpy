@@ -27,7 +27,8 @@ class EnetPacket(object):
 		# Call parser for specific packet command
 		command_parsers = {commands.CONNECT: self.parse_connect,
 		                   commands.CONNECT_VERIFY: self.parse_connect_verify,
-				   commands.PING: self.parse_ping}
+				   commands.PING: self.parse_ping,
+				   commands.BANDWIDTH_LIMIT, self.parse_bandwidth_limit}
 		command_parsers[self.command](data[8:])
 
 	def parse_connect(self, remaining_data):
@@ -39,6 +40,9 @@ class EnetPacket(object):
 	def parse_ping(self, remaining_data):
 		if len(remaining_data) != 0:
 			raise ValueError("unrecognized ping packet")
+
+	def parse_bandwidth_limit(self, remaining_data):
+		self.incoming_bandwidth, self.outgoing_bandwidth = struct.unpack_from('II', remaining_data)
 
 	def to_packed_proto_header(self):
 		cmd = self.command
