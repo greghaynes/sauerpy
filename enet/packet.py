@@ -28,7 +28,13 @@ class EnetPacket(object):
 		command_parsers = {commands.CONNECT: self.parse_connect,
 		                   commands.CONNECT_VERIFY: self.parse_connect_verify,
 				   commands.PING: self.parse_ping,
-				   commands.BANDWIDTH_LIMIT, self.parse_bandwidth_limit}
+				   commands.BANDWIDTH_LIMIT, self.parse_bandwidth_limit,
+				   commands.SEND_RELIABLE: self.parse_reliable,
+				   commands.SEND_UNRELIABLE: self.parse_unreliable,
+				   commands.SEND_UNSEQUENCED: self.parse_unsequenced,
+				   commands.ACNOWLEDGE: self.parse_acknowledge,
+				   commands.THROTTLE_CONFIGURE: self.parse_throttle_configure,
+				   commands.DISCONNECT: parse_disconnect}
 		command_parsers[self.command](data[8:])
 
 	def parse_connect(self, remaining_data):
@@ -43,6 +49,31 @@ class EnetPacket(object):
 
 	def parse_bandwidth_limit(self, remaining_data):
 		self.incoming_bandwidth, self.outgoing_bandwidth = struct.unpack_from('II', remaining_data)
+
+	def parse_reliable(self, remaining_data):
+		self.data_length = struct.unpack_from('H', remaining_data[:2])
+		self.received_data = remaining_data[2:]
+
+	def parse_unreliable(self, remaining_data):
+		self.unreliable_sequence_number, self.data_length = struct.unpack_from('HH', remaining_data[:4])
+		self.received_data = remaining_data[4:]
+
+	def parse_unsequenced(self, remaining_data):
+		self.unsequenced_group, self.data_length = struct.unpack_from('HH', remaining_data[:4])
+		self.received_data = remaining_data[4:]
+_
+	def parse_acknowledge(self, remaining_data):
+		self.acknowledged_reliable_sequence_number, self.acknowledged_sent_time = struct.unpack_from('HH', remaining_data)
+
+	def parse_throttle_configure(self, remaining_data):
+		self.throttle_inteval, self.throttle_acceleration, self.throttle_deceleration = struct.unpack_from('III', remaining_data)
+
+	def parse_disconnect(self, remaining_data):
+		self.received_data = struct.unpack_from('I', remaining_data)
+
+	def parse_fragment(self, remaining_data):
+		self.start_sequence_number, self.data_length, self.fragment_count, self.fragment_number, self.total_length, self.fragment_offset = struct.unpack_from('HHIIII', remaining_data[:20])
+		self.received_data = remaining_data[20:]	
 
 	def to_packed_proto_header(self):
 		cmd = self.command
