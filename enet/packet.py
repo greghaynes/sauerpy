@@ -32,9 +32,9 @@ class EnetPacket(object):
 		                   commands.SEND_RELIABLE: self.parse_reliable,
 		                   commands.SEND_UNRELIABLE: self.parse_unreliable,
 		                   commands.SEND_UNSEQUENCED: self.parse_unsequenced,
-		                   commands.ACNOWLEDGE: self.parse_acknowledge,
+		                   commands.ACKNOWLEDGE: self.parse_acknowledge,
 		                   commands.THROTTLE_CONFIGURE: self.parse_throttle_configure,
-		                   commands.DISCONNECT: parse_disconnect}
+		                   commands.DISCONNECT: self.parse_disconnect}
 		command_parsers[self.command](data[8:])
 
 	def parse_connect(self, remaining_data):
